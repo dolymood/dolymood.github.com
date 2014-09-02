@@ -28,6 +28,8 @@ author :
 #
 production_url : http://blog.aijc.net
 
+paginate: 10
+
 # All Jekyll-Bootstrap specific configurations are namespaced into this hash
 #
 JB :
