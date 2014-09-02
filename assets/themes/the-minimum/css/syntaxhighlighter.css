@@ -32,7 +32,7 @@ pre .m { color: #3677a9 } /* Literal.Number */
 pre .s { color: #ed9d13 } /* Literal.String */
 pre .na { color: #bbbbbb } /* Name.Attribute */
 pre .nb { color: #24909d } /* Name.Builtin */
-pre .nc { color: #447fcf; text-decoration: underline } /* Name.Class */
+pre .nc { color: #447fcf;  } /* Name.Class */
 pre .no { color: #40ffff } /* Name.Constant */
 pre .nd { color: #ffa500 } /* Name.Decorator */
 pre .ni { color: #d0d0d0 } /* Name.Entity */
