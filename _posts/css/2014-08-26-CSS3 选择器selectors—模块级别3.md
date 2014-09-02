@@ -6,8 +6,6 @@ tags : [css, css3, CSS选择器, css3 selectors]
 ---
 {% include JB/setup %}
 
-# CSS3 选择器selectors—模块级别3
-
 ## 摘要
 
 选择器就是匹配在树中元素的模式，且形成了用来选择XML文档中的节点的技术之一。选择器优化了HTML和XML的使用，且被设计成了可用的性能关键型代码。
