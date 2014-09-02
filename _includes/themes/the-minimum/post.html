@@ -14,20 +14,21 @@
 					{{ content }}
 					<div class="meta">
 						<p class="date-publish">
-							Published: 
+							发布于: 
 							<date class="date-pub" title="{{ page.date | date_to_xmlschema }}" datetime="{{ page.date | date_to_xmlschema }}" pubdate>
-							<span class="month"><abbr>{{ page.date | date: '%B' }}</abbr></span>
-							<span class="day">{{ page.date | date: '%d' }}</span>
-							<span class="year">{{ page.date | date: '%Y' }}</span>
+							<span class="year">{{ page.date | date: '%Y' }}年</span>
+							<span class="month"><abbr>{{ page.date | date: '%m' }}月</abbr></span>
+							<span class="day">{{ page.date | date: '%d' }}日</span>
+							
 							</date>
 						</p>
 						<ul class="list-category list-linear">
-							<li class="list-head">category: </li>
+							<li class="list-head">分类: </li>
 							{% assign categories_list = page.categories %}
 							{% include JB/categories_list %}
 						</ul>
 						<ul class="list-tag list-linear">
-							<li class="list-head">tags: </li>
+							<li class="list-head">标签: </li>
 							{% assign tags_list = page.tags %}
 							{% include JB/tags_list %}
 						</ul>
