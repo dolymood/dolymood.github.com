@@ -859,3 +859,4 @@ pre {
 
 .info {border-bottom:2px dotted #eee;padding-bottom:0.2em;margin-bottom:0.5em;color:#aaa;font-size:.8em;}
 .info-item:not(:first-child) {margin-left:.2em}
+.info-item a {margin-right:2px;}
