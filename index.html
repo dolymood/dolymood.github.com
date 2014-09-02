@@ -8,7 +8,7 @@ title: 首页
 {% for post in paginator.posts %}
   <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
   <p class="info">
-    <span class="date">发表于<a href="{{ post.url }}" rel="bookmark">{{ post.date | date: "%Y年%m月%d日"}}</a></span>
+    <span class="date">发表于<a href="{{ post.url }}">{{ post.date | date: "%Y年%m月%d日"}}</a></span>
   </p>
   <div class="content">
     {{ post.excerpt | markdownify }}
