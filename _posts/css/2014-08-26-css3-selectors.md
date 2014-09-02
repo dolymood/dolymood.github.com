@@ -217,11 +217,11 @@ h1
 
 > 例子：
 
-* > *[hreflang|=en]和[hreflang|=en]是相等的，
+>> *[hreflang|=en]和[hreflang|=en]是相等的，
 
-* > *.warning和.warning是相等的，
+>> *.warning和.warning是相等的，
 
-* > *#myid和#myid是相等的。
+>> *#myid和#myid是相等的。
 
 #### 通用选择器和命名空间
 
