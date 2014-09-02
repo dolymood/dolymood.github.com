@@ -6,8 +6,6 @@ tags : [css, CSS可视化格式模型细节]
 ---
 {% include JB/setup %}
 
-## CSS 可视化格式模型细节（Visual formatting model details）
-
 ### 包含块的定义
 
 有时一个元素的盒的位置和尺寸的计算是相对于一个确定的矩形的，叫做这个元素的包含块。一个元素的包含块的按照如下定义：

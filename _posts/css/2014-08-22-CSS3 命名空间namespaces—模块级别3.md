@@ -6,8 +6,6 @@ tags : [css, css3, CSS命名空间]
 ---
 {% include JB/setup %}
 
-# CSS3 命名空间namespaces—模块级别3
-
 ## 摘要
 
 CSS命名空间模块定义了在CSS中使用命名空间的语法。他为了声明默认的命名空间和绑定命名空间到`namespace`前缀上而定义了`@namespace`规则，且他也定义了其他规范能采纳使用那些在命名空间合法名字中的前缀的语法。

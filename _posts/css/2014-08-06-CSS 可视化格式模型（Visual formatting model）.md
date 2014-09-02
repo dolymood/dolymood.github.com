@@ -6,8 +6,6 @@ tags : [css, CSS可视化格式模型]
 ---
 {% include JB/setup %}
 
-## CSS 可视化格式模型（Visual formatting model）
-
 ### 可视化格式模型简介
 
 这一章以及[下一章](http://blog.aijc.net/~posts/css/005-visudet.md)来描述可视化格式模型：用户代理针对于可视化媒介是怎样处理文档树的。

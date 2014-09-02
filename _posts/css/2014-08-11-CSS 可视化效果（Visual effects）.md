@@ -6,8 +6,6 @@ tags : [css, CSS可视化效果]
 ---
 {% include JB/setup %}
 
-## CSS 可视化效果（Visual effects）
-
 ### overflow 和 clipping 
 
 一般一个块盒的内容是限制在这个盒的内容边界的。在某些情况下，一个盒可能溢出overflow，意味着他的内容会部分或者完全的在这个盒的外边。例如：

@@ -6,8 +6,6 @@ tags : [css, CSS颜色, CSS背景]
 ---
 {% include JB/setup %}
 
-## CSS 颜色color和背景background
-
 CSS属性允许作者指定一个元素的前景色color和背景background。背景可以是颜色也可以是图片。background属性允许作者定位背景图、重复他以及声明他是否应该相对于viewport规定或者随着文档滚动。
 
 
