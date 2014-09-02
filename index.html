@@ -7,8 +7,8 @@ title: 首页
 <!-- This loops through the paginated posts -->
 {% for post in paginator.posts %}
   <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
-  <p class="author">
-    <span class="date">{{ post.date | date: "%Y-%m-%d"}}</span>
+  <p class="info">
+    <span class="date">发表于<a href="{{ post.url }}" rel="bookmark">{{ post.date | date: "%Y年%m月%d日"}}</a></span>
   </p>
   <div class="content">
     {{ post.excerpt | markdownify }}
