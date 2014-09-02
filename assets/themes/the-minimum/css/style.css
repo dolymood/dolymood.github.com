@@ -856,3 +856,5 @@ pre {
 
 /*自定义样式*/
 .fork-bar img {position:fixed;right:0;top:0;}
+
+.info {border-top:2px dotted #eee;border-bottom:2px dotted #eee;padding-top:0.5em;padding-bottom:0.5em;margin-top:0.5em;margin-bottom:0.5em;color:#aaa;font-size:.8em;}
