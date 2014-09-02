@@ -296,6 +296,7 @@ pre {
 .unit-article blockquote p {
   margin-left: 0;
   margin-right: 0;
+  margin-bottom: .2em;
 }
 .unit-article ul, .unit-article ol, .unit-article dl {
   padding-left: 0;
