@@ -850,3 +850,8 @@ pre {
     margin-right: 360px;
   }
 }
+
+
+/*自定义样式*/
+.fork-bar {text-indent:-999em;}
+.fork-bar img {position:fixed;right:0;top:0;}
