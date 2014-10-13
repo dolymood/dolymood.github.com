@@ -864,4 +864,4 @@ pre {
 .pagination {margin-bottom:.5em}
 
 table tr:nth-child(2n) {background:#f8f8f8;}
-table th, table td {border:1px solid #ddd;}
+table th, table td {padding:5px;border:1px solid #ddd;}
