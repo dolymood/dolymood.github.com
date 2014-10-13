@@ -862,3 +862,5 @@ pre {
 .info-item a {margin-right:2px;}
 
 .pagination {margin-bottom:.5em}
+
+table th, table td {border:1px solid #ddd;}
