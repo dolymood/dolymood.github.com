@@ -1096,7 +1096,7 @@ _在这段落中，"在xx之前"意味着看起来离用户更近。_
 
 1. 层叠级别为正值的子层叠上下文。
 
-_PS: 来自问help的示意图：_
+_PS: 来自w3help的示意图：_
 
 ![示意图](http://www.w3help.org/zh-cn/kb/013/013/stacklevel.png)
 
