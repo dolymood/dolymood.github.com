@@ -77,7 +77,7 @@ response的content-type的值，一般是如下几种情况：
 
 虽然说是一个本不应存在的`content-type:text/json`引起的，但是对于IE9，这种不会触发`load`事件bug实在是万万不能想到的。
 
-仍然把js代码判断应该用`addEventListener`或者`attachEvent`的部分稍稍修改了下，由
+最后，仍然把js代码判断应该用`addEventListener`或者`attachEvent`的部分稍稍修改了下，由
 
 ```js
 function addEvent(element, type, handler) {
