@@ -2,7 +2,7 @@
 layout: post
 category : js
 tagline: ""
-tags : [js, 浏览器兼容]
+tags : [js, 浏览器兼容性]
 ---
 {% include JB/setup %}
 
