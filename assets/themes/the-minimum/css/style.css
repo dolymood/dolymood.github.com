@@ -242,6 +242,9 @@ pre {
   margin-top: 0;
   margin-bottom: 0;
 }
+.unit-article .entry-content {
+  word-wrap:break-word;
+}
 .unit-article .entry-content h2,
 .unit-article .entry-content h3,
 .unit-article .entry-content h4,
