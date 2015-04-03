@@ -350,7 +350,7 @@ img { display: none }      /* Do not display images */
 
 #### BFC 块级格式化上下文
 
-浮动元素、绝对定位元素、不是块盒的块容器（例如inline-block table-cell table-caption）元素，以及overflow不是visible的块盒会给他们的内容创建新的BFC。
+浮动元素、绝对定位元素、不是块盒的块容器（例如inline-block table-cell table-caption）元素，以及overflow不是visible（除非该值已经扩散到了视口viewport）的块盒会给他们的内容创建新的BFC。
 
 在一个BFC中，盒是从其包含块的顶部一个挨着一个在垂直方向上布局的。两个在垂直方向上相邻的的盒子之间的间距是由margin属性确定的。在同一个BFC中的两个毗邻的块级盒在垂直方向的margin会发生折叠。
 
