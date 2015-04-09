@@ -51,8 +51,7 @@ ul, li {list-style:none;margin:0;padding:0;}
 .tab > ul > li {display:inline-block;vertical-align:top;margin:0 5px;}
 .tab > ul > li > a {display:inline-block;position:relative;padding:3px 10px;border:1px solid transparent;border-bottom-color:#999;background:#f3f3f3;transition:all .2s;}
 .tab > ul > li > a:hover {border-color:#999;border-bottom-color:#f3f3f3;}
-.tab > ul > .active > a {color:#fff;cursor:default;border-color:#999;background:#25ab5e;}
-.tab > ul > .active > a:hover {border-bottom-color:#25ab5e;}
+.tab > ul > .active > a {color:#fff;cursor:default;border-color:#999;border-bottom-color:#25ab5e!important;background:#25ab5e;}
 ```
 
 下面就是设计这个组件了，先不去纠结于做成插件形式，或者要不要new操作。下面给出我自己写的基本实现：
