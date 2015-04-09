@@ -2,11 +2,11 @@
 layout: post
 category : js
 tagline: ""
-tags : [js, 移动端开发, 移动端单页面, 移动端单页面框架]
+tags : [js, web端开发, web端单页面, web端单页面框架]
 ---
 {% include JB/setup %}
 
-### M，一个轻量级移动端单页面骨架
+### M(mobile-router.js)，一个轻量级web移动端单页面骨架
 
 请看[DEMO](http://demo.aijc.net/js/M/examples/)页的示例。
 
