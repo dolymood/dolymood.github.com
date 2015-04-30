@@ -95,8 +95,8 @@ M.router.init([
 	/*views容器选择器 如果为空，或者没有符合元素，那么views的容器元素就为body了*/
 	viewsSelector: '',
 
-	/*view的class*/
-	viewClass: 'page-view',
+	/*view的class 默认会有 page-view 的 class 这里配置的是其他增加的 class */
+	viewClass: 'page-view2 page-view3',
 
 	/*是否有动画*/
 	animation: true,
