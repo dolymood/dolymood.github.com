@@ -16,9 +16,13 @@ tags : [js, web端开发, web端单页面, web端单页面框架, mobile-router.
 
 [mobile-router.js-demo](https://github.com/dolymood/mobile-router.js-demo)是一个关于mobile-router.js如何使用的DEMO，暂时包含：前后端模板共享，后端输出首屏，与其他库自由搭配，动画转场。
 
+[mobile-router.js-sample](https://github.com/dolymood/mobile-router.js-sample) - A mobile-router.js demo like [ui-router sample](http://angular-ui.github.io/ui-router/sample/)
+
 ### 优势：
 
 * 使用简单、方便、轻量，基于 [history](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history)、[window.onpopstate](https://developer.mozilla.org/en-US/docs/WindowEventHandlers.onpopstate)。
+
+* 支持路由视图嵌套 (1.5.0+)。
 
 * 无依赖，可与其他框架（库）搭配自由使用，例如：`jquery`, `zepto`, `iscroll`等。
 
@@ -28,15 +32,13 @@ tags : [js, web端开发, web端单页面, web端单页面框架, mobile-router.
 
 * 自动缓存部分画面，可配置缓存数量，默认3个。
 
-* 每个路由都有对应的`callback`和`onDestroy`配置方法，分别用于显示了对应画面后的回调以及当该画面销毁时回调。
+* 每个路由都有对应的`callback`和`onDestroy`等配置方法，分别用于显示了对应画面后的回调以及当该画面销毁时回调。
 
 * 利用`CSS animation`控制动画转场（页面切换）效果，也可设置关闭动画效果。
 
 * “保留”浏览器原生`hash`功能，根据`hash`，可自由跳转到对应`id`元素位置。
 
 * 可配置`enablePushState`决定是否使用`pushstate`功能，默认启用；不启用的话，仅仅影响的是不产生历史，但是路由依旧好使的，也就是还是基于`url`的。
-
-<!--more-->
 
 ### 一些注意点：
 
@@ -60,16 +62,63 @@ M.router.init([
 		getTemplate: function() {
 			return '/index';
 		},
-		callback: function() {
+		onActive: function() { // 1.5.5+ 当路由被激活时调用，一般此时还没创建 `page-view` 元素
+			
+		},
+		callback: function() { // 页面展示出来之后
 			if (this.cached) return;
 			// 处理操作...
 		},
 		onDestroy: function() {
 			// 例如，处理一些解绑操作，销毁和DOM关联
+		},
+		onEnter: function(paramName) { // 1.5.3+ // 页面将要显示的时候
+
+		},
+		onLeave: function() { // 1.5.3+ // // 页面将要隐藏的时候
+
+		}
+	},
+	{ // 支持 redirectTo 语法，可以是直接的 url 还可以是函数 (1.5.5+)
+		path: '/redirectTo/:rtPath',
+		redirectPushState: false, // 默认 true, 当激活redirectTo的时候是否启用`pushState`
+		redirectTo: function(rtPath) {
+			console.log('redirectTo', arguments, this);
+			return '/' + rtPath;
+		}
+	},
+	{ // support redirectTo , string url or function (1.5.5+)
+		// 如果当前的route配置有getTemplate的话，此时会表现的像正常的
+		// route一样依旧会创建`page-view`、会调用回调函数们、会做动画等。
+		// 当正常行为结束之后（route的callback被调用之后）会触发redirectTo的逻辑
+		path: '/contacts',
+		getTemplate: contacts.getTemplate,
+		onEnter: contacts.onEnter,
+		onLeave: contacts.onLeave,
+		callback: contacts.controller,
+		onDestroy: contacts.onDestroy,
+
+		redirectTo: '/contacts/list',
+		redirectPushState: false,
+
+		children: { // Nested routes & views! (1.5.0+)
+			viewsSelector: '.content',
+			cacheViewsNum: 1,
+			routes: [
+				{
+					// all contacts
+					path: '/list',
+					getTemplate: list.getTemplate,
+					onEnter: list.onEnter,
+					onLeave: list.onLeave,
+					callback: list.controller,
+					onDestroy: list.onDestroy
+				}
+			]
 		}
 	},
 	{
-		path: '/c/:paramName',
+		path: '/m/:paramName',
 		cacheTemplate: false, // 针对于当前的route，是否缓存模板
 		getTemplate: function(cb) {
 			// 这里模拟异步得到模板内容
@@ -77,7 +126,7 @@ M.router.init([
 			// that.params 参数信息
 			// that.query query信息
 			setTimeout(function() {
-				cb('/c/' + that.params.paramName);
+				cb('/m/' + that.params.paramName);
 			}, 200);
 		},
 		callback: function(paramName) {
@@ -86,6 +135,67 @@ M.router.init([
 		},
 		onDestroy: function() {
 			// 例如，处理一些解绑操作，销毁和DOM关联
+		}
+	},
+	{ // 嵌套！！(1.5.0+)
+		path: '/b/:bid',
+		getTemplate: function(cb) {
+			var path = this.path.substr(1);
+			setTimeout(function() {
+				var lis = '';
+				var t;
+				for (var i = 1; i <= 4; i++) {
+					t = path + '/s' + i;
+					lis += '<li><a href="' + t + '">/' + t + '</a></li>';
+					// 或者：（这样的话 不会对地址栏有影响）
+					// lis += '<li><a href="#" data-href="' + t + '">/' + t + '</a></li>';
+				}
+				cb(
+					'<ul class="nav">' + lis + '</ul>'
+				);
+			}, 200);
+		},
+		callback: function() {
+			console.log('callback:/b', this, arguments);
+		},
+		onDestroy: function() {
+			// 当前被销毁时调用
+			console.log('destroy:/b', this, arguments);
+		},
+
+		children: {
+			/* 这些配置项 默认继承自 parent */
+			viewsSelector: '',
+			viewClass: 'sub-view-b',
+			maskClass: 'mask',
+			showLoading: true,
+			cacheViewsNum: 3,
+			cacheTemplate: true,
+			animation: true,
+			aniClass: 'slide',
+
+			routes: [
+				{
+					path: '/:subB', // '/b/:bid' + '/:subB'
+					/* 这里依旧可以设置 */
+					cacheTemplate: false, // 针对于当前的route，是否缓存模板
+					animation: true, // 针对于当前的route，是否有动画
+					aniClass: 'slideup', // 针对于当前的route，动画类型（效果）
+					getTemplate: function(cb) {
+						var that = this;
+						setTimeout(function() {
+							cb('<div>' + that.path + '<p>sub content</p></div>');
+						}, 200);
+					},
+					callback: function() {
+						console.log('sub callback b', this, arguments);
+					},
+					onDestroy: function() {
+						console.log('sub destroy b', this, arguments);
+					}
+				}
+			]
+			
 		}
 	}
 ], {
@@ -113,7 +223,7 @@ M.router.init([
 });
 
 // 也可以通过这种形式添加
-M.router.get('/ddd/{dddID:int}', function(dddID) {
+M.router.add('/ddd/{dddID:int}', function(dddID) {
 	// 这是 callback 回调
 }, {
 	cacheTemplate: true,
@@ -165,6 +275,8 @@ M.history.start({
 
 * `index7.html`: `M.history`禁用掉pushstate示例。
 
+* `index8.html`: 嵌套路由视图示例。
+
 * `requirejs/`: 使用 [require.js](http://requirejs.org/) 示例
 
 ### 后端渲染
@@ -184,3 +296,4 @@ M.history.start({
 ### 协议
 
 [MIT](https://github.com/dolymood/mobile-router.js/blob/master/LICENSE)
+
