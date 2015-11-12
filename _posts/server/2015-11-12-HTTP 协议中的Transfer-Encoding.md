@@ -87,7 +87,7 @@ require('net').createServer(function(sock) {
 
 前面说过 Content-Encoding 和 Transfer-Encoding 二者经常会结合来用，其实就是针对 Transfer-Encoding 的分块再进行 Content-Encoding。下面是我用 telnet 请求测试页面得到的响应，就对分块内容进行了 gzip 编码：
 
-```shell
+```
 > telnet 106.187.88.156 80
 
 GET /test.php HTTP/1.1
