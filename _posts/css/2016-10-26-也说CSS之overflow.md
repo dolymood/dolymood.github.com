@@ -48,6 +48,8 @@ tags : [overflow, css]
 
 * `overflow` 的值为非 `visible` 的时候可以生成新的 `BFC` （块级格式化上下文），常见的结果就是：消除浮动影响、左侧固定右侧自适应（不需要指定 `margin-left` ）、`margin` 不再折叠等。
 
+* `overflow:hidden` 搭配 `white-space:nowrap`、`text-overflow:ellipsis`实现`...`效果。
+
 * `overflow:hidden` 可以让 `1px`（ `scale(0.5)` 这种）显示的更加精细。
 
 * `overflow:hidden` 可以解决移动端页面内容（一般文字内容相对多一点的时候效果更明显）会出现“进来左右方向缩小到一块”然后再变为正常布局的 bug ，这个过程当然会出现很明显的闪动效果。
