@@ -452,6 +452,8 @@ new Vue({
 
 具体来说，首先判断实例化时 `options` 是否包含 `router`，然后给当前实例赋值 `_router`，这样在访问原型上的 `$router` 的时候就可以得到 `router` 了。
 
+#### router.init
+
 然后来看 `router` 的 `init` 方法就干了哪些事情，依旧是在 `src/index.js` 中：
 
 ```js
@@ -492,4 +494,167 @@ export default class VueRouter {
 // ...
 ```
 
-_未完待续..._
+可以看到初始化主要就是给 `app` 赋值，针对于 `HTML5History` 和 `HashHistory` 特殊处理，因为在这两种模式下才有可能存在进入时候的不是默认页，需要根据当前浏览器地址栏里的 `path` 或者 `hash` 来激活对应的路由，此时就是通过调用 `transitionTo` 来达到目的；而且此时还有个注意点是针对于 `HashHistory` 有特殊处理，为什么不直接在初始化 `HashHistory` 的时候监听 `hashchange` 事件呢？这个是为了修复[https://github.com/vuejs/vue-router/issues/725](https://github.com/vuejs/vue-router/issues/725)这个 bug 而这样做的，简要来说就是说如果在 `beforeEnter` 这样的钩子函数中是异步的话，`beforeEnter` 钩子就会被触发两次，原因是因为在初始化的时候如果此时的 `hash` 值不是以 `/` 开头的话就会补上 `#/`，这个过程会触发 `hashchange` 事件，所以会再走一次生命周期钩子，也就意味着会再次调用 `beforeEnter` 钩子函数。
+
+来看看这个具体的 `transitionTo` 方法的大概逻辑，在 `src/history/base.js` 中：
+
+```js
+/* @flow */
+
+import type VueRouter from '../index'
+import { warn } from '../util/warn'
+import { inBrowser } from '../util/dom'
+import { runQueue } from '../util/async'
+import { START, isSameRoute } from '../util/route'
+import { _Vue } from '../install'
+
+export class History {
+// ...
+  transitionTo (location: RawLocation, cb?: Function) {
+  	// 调用 match 得到匹配的 route 对象
+    const route = this.router.match(location, this.current)
+    // 确认过渡
+    this.confirmTransition(route, () => {
+      // 更新当前 route 对象
+      this.updateRoute(route)
+      cb && cb(route)
+      // 子类实现的更新url地址
+      // 对于 hash 模式的话 就是更新 hash 的值
+      // 对于 history 模式的话 就是利用 pushstate / replacestate 来更新
+      // 浏览器地址
+      this.ensureURL()
+    })
+  }
+  // 确认过渡
+  confirmTransition (route: Route, cb: Function) {
+    const current = this.current
+    // 如果是相同 直接返回
+    if (isSameRoute(route, current)) {
+      this.ensureURL()
+      return
+    }
+	// 交叉比对当前路由的路由记录和现在的这个路由的路由记录
+	// 以便能准确得到父子路由更新的情况下可以确切的知道
+	// 哪些组件需要更新 哪些不需要更新
+    const {
+      deactivated,
+      activated
+    } = resolveQueue(this.current.matched, route.matched)
+    
+    // 整个切换周期的队列
+    const queue: Array<?NavigationGuard> = [].concat(
+      // leave 的钩子
+      extractLeaveGuards(deactivated),
+      // 全局 router before hooks
+      this.router.beforeHooks,
+      // 将要更新的路由的 beforeEnter 钩子
+      activated.map(m => m.beforeEnter),
+      // 异步组件
+      resolveAsyncComponents(activated)
+    )
+
+    this.pending = route
+    每一个队列执行的 iterator 函数
+    const iterator = (hook: NavigationGuard, next) => {
+      // 确保期间还是当前路由
+      if (this.pending !== route) return
+      hook(route, current, (to: any) => {
+        if (to === false) {
+          // next(false) -> abort navigation, ensure current URL
+          this.ensureURL(true)
+        } else if (typeof to === 'string' || typeof to === 'object') {
+          // next('/') or next({ path: '/' }) -> redirect
+          this.push(to)
+        } else {
+          // confirm transition and pass on the value
+          next(to)
+        }
+      })
+    }
+	// 执行队列
+    runQueue(queue, iterator, () => {
+      const postEnterCbs = []
+      // 组件内的钩子
+      const enterGuards = extractEnterGuards(activated, postEnterCbs, () => {
+        return this.current === route
+      })
+      // 在上次的队列执行完成后再执行组件内的钩子
+      // 因为需要等异步组件以及是OK的情况下才能执行
+      runQueue(enterGuards, iterator, () => {
+      	// 确保期间还是当前路由
+        if (this.pending === route) {
+          this.pending = null
+          cb(route)
+          this.router.app.$nextTick(() => {
+            postEnterCbs.forEach(cb => cb())
+          })
+        }
+      })
+    })
+  }
+  // 更新当前 route 对象
+  updateRoute (route: Route) {
+    const prev = this.current
+    this.current = route
+    // 注意 cb 的值 
+    // 每次更新都会调用 下边需要用到！
+    this.cb && this.cb(route)
+    // 执行 after hooks 回调
+    this.router.afterHooks.forEach(hook => {
+      hook && hook(route, prev)
+    })
+  }
+}
+// ...
+```
+
+可以看到整个过程就是执行约定的各种钩子以及处理异步组件问题，这里有一些具体函数具体细节被忽略掉了（后续会具体分析）但是不影响具体理解这个流程。
+
+回到之前看的 `init`，最后调用了 `history.listen` 方法：
+
+```js
+history.listen(route => {
+  this.app._route = route
+})
+```
+
+`listen` 方法很简单就是设置下当前历史对象的 `cb` 的值, 在之前分析 `transitionTo` 的时候已经知道在 `history` 更新完毕的时候调用下这个 `cb`。然后看这里设置的这个函数的作用就是更新下当前应用实例的 `_route` 的值，更新这个有什么用呢？请看下段落的分析。
+
+#### defineReactive 定义 _route
+
+继续回到 `beforeCreate` 钩子函数中，在最后通过 `Vue` 的工具方法给当前应用实例定义了一个响应式的 `_route` 属性，值就是获取的 `this._router.history.current`，也就是当前 `history` 实例的当前活动路由对象。给应用实例定义了这么一个响应式的属性值也就意味着如果该属性值发生了变化，就会触发更新机制，继而调用应用实例的 `render` 重新渲染。还记得上一段结尾留下的疑问，也就是 `history` 每次更新成功后都会去更新应用实例的 `_route` 的值，也就意味着一旦 `history` 发生改变就会触发更新机制调用应用实例的 `render` 方法进行重新渲染。
+
+### router-link 和 router-view 组件
+
+回到实例化应用实例的地方：
+
+```js
+new Vue({
+  router,
+  template: `
+    <div id="app">
+      <h1>Basic</h1>
+      <ul>
+        <li><router-link to="/">/</router-link></li>
+        <li><router-link to="/foo">/foo</router-link></li>
+        <li><router-link to="/bar">/bar</router-link></li>
+        <router-link tag="li" to="/bar">/bar</router-link>
+      </ul>
+      <router-view class="view"></router-view>
+    </div>
+  `
+}).$mount('#app')
+```
+
+可以看到这个实例的 `template` 中包含了两个自定义组件：`router-link` 和 `router-view`。
+
+__未完待续__
+
+<!-- #### router-view 组件
+
+首先来看看这个 `router-view` 组件的定义，在源码的 `src/components/view.js` 中：
+
+```js
+
+``` -->
+
