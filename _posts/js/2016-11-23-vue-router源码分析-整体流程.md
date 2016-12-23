@@ -537,9 +537,9 @@ export class History {
       this.ensureURL()
       return
     }
-	// 交叉比对当前路由的路由记录和现在的这个路由的路由记录
-	// 以便能准确得到父子路由更新的情况下可以确切的知道
-	// 哪些组件需要更新 哪些不需要更新
+    // 交叉比对当前路由的路由记录和现在的这个路由的路由记录
+    // 以便能准确得到父子路由更新的情况下可以确切的知道
+    // 哪些组件需要更新 哪些不需要更新
     const {
       deactivated,
       activated
@@ -558,7 +558,7 @@ export class History {
     )
 
     this.pending = route
-    每一个队列执行的 iterator 函数
+    // 每一个队列执行的 iterator 函数
     const iterator = (hook: NavigationGuard, next) => {
       // 确保期间还是当前路由
       if (this.pending !== route) return
@@ -575,7 +575,7 @@ export class History {
         }
       })
     }
-	// 执行队列
+    // 执行队列
     runQueue(queue, iterator, () => {
       const postEnterCbs = []
       // 组件内的钩子
