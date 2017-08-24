@@ -8,7 +8,7 @@ tags : [vue-simple-uploader, simple-uploader.js, vue]
 
 在日常开发中经常会遇到文件上传的需求，[vue-simple-uploader](https://github.com/simple-uploader/vue-uploader) 就是一个基于 [simple-uploader.js](https://github.com/simple-uploader/Uploader) 和 Vue 结合做的一个上传组件，自带 UI，可覆盖；先来张动图看看效果：
 
-![example](https://github.com/simple-uploader/vue-uploader/blob/master/example/simple-uploader.gif)
+![example](http://demo.aijc.net/js/vue-uploader/example/simple-uploader.gif)
 
 其主要特点就是：
 
